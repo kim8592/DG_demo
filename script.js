@@ -798,7 +798,6 @@ HƯỚNG DẪN VIẾT NHẬN XÉT HỌC SINH TIỂU HỌC:
 
 🏆 MỨC T (TỐT):
 - Khen rõ ràng những kỹ năng/kiến thức cụ thể em đã nắm vững
-- Nêu những kết quả cụ thể em đạt được
 - TUYỆT ĐỐI KHÔNG nêu hướng cải thiện, không nêu "tiếp tục", "phát huy", "luyện thêm"
 - VÍ DỤ ĐÚNG:
   ✅ "Em vẽ hình theo mẫu rất đẹp và sáng tạo. Sản phẩm của em nổi bật với cách trang trí độc đáo"
@@ -811,7 +810,6 @@ HƯỚNG DẪN VIẾT NHẬN XÉT HỌC SINH TIỂU HỌC:
 
 ✅ MỨC H (HOÀN THÀNH) - ViewMode SUBJECT:
 - Khen em đã hoàn thành tốt
-- Nêu cụ thể những kỹ năng/kiến thức đã đạt được
 - BẮT BUỘC phải nêu hướng phát huy, không được chỉ khen
 - VÍ DỤ ĐÚNG:
   ✅ "Em đọc được các câu chứa chữ mới, nắm được đặc điểm của các loài động vật qua bài. Nên tập viết thêm câu để luyện kỹ năng dùng từ ngữ"
@@ -823,7 +821,6 @@ HƯỚNG DẪN VIẾT NHẬN XÉT HỌC SINH TIỂU HỌC:
 
 ✅ MỨC Đ (ĐẠT) - ViewMode Không phải SUBJECT:
 - Khen em đã đạt yêu cầu
-- Nêu cụ thể những kỹ năng/kiến thức đã đạt được
 - BẮT BUỘC phải nêu hướng phát huy, không được chỉ khen
 - VÍ DỤ ĐÚNG:
   ✅ "Em tham gia tích cực vào hoạt động tập thể, hỗ trợ bạn. Tiếp tục phát huy tinh thần đoàn kết"
