@@ -933,7 +933,7 @@ Hãy viết nhận xét cho từng học sinh theo đúng ID và trả về đú
       { role: "system", content: systemPrompt },
       { role: "user", content: userInstruction }
     ],
-    temperature: 0.9
+    temperature: 0.7
   })
 });
 
@@ -1079,7 +1079,7 @@ HƯỚNG DẪN:
       { role: "system", content: systemPromptRetry },  // ✅ ĐỔI ĐÂY
       { role: "user", content: userInstruction }
     ],
-    temperature: 0.9
+    temperature: 0.7
   })
 });
 
