@@ -798,7 +798,7 @@ HƯỚNG DẪN VIẾT NHẬN XÉT HỌC SINH TIỂU HỌC:
 
 🏆 MỨC T (TỐT):
 - Khen rõ ràng những kỹ năng/kiến thức cụ thể em đã nắm vững
-- TUYỆT ĐỐI KHÔNG nêu hướng cải thiện, không nêu "tiếp tục", "phát huy", "luyện thêm"
+- Bắt buộc không nêu hướng cải thiện, không nêu "tiếp tục", "phát huy", "luyện thêm"
 - VÍ DỤ ĐÚNG:
   ✅ "Em vẽ hình theo mẫu rất đẹp và sáng tạo. Sản phẩm của em nổi bật với cách trang trí độc đáo"
   ✅ "Em đọc bài thơ lưu loát, phát âm đúng, hiểu rõ ý tình tác phẩm"
