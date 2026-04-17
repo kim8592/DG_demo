@@ -799,60 +799,20 @@ HƯỚNG DẪN VIẾT NHẬN XÉT HỌC SINH TIỂU HỌC:
 🏆 MỨC T (TỐT):
 - Khen rõ ràng những kỹ năng/kiến thức cụ thể em đã nắm vững
 - Bắt buộc không nêu hướng cải thiện, không nêu "tiếp tục", "phát huy", "luyện thêm"
-- VÍ DỤ ĐÚNG:
-  ✅ "Em vẽ hình theo mẫu rất đẹp và sáng tạo. Sản phẩm của em nổi bật với cách trang trí độc đáo"
-  ✅ "Em đọc bài thơ lưu loát, phát âm đúng, hiểu rõ ý tình tác phẩm"
-  ✅ "Em tính toán chính xác, đặt tính hợp lý, hoàn thành bài nhanh"
-- VÍ DỤ SAI:
-  ❌ "Em vẽ đẹp. Tiếp tục luyện tập để vẽ tốt hơn" (không thêm "tiếp tục")
-  ❌ "Em làm tốt. Phát huy thêm nữa" (không nêu phát huy)
-  ❌ "Em hay. Cần cố gắng hơn" (mâu thuẫn)
 
 ✅ MỨC H (HOÀN THÀNH) - ViewMode SUBJECT:
 - Khen em đã hoàn thành tốt
 - BẮT BUỘC phải nêu hướng phát huy, không được chỉ khen
-- VÍ DỤ ĐÚNG:
-  ✅ "Em đọc được các câu chứa chữ mới, nắm được đặc điểm của các loài động vật qua bài. Nên tập viết thêm câu để luyện kỹ năng dùng từ ngữ"
-  ✅ "Em hoàn thành bài tập, tính được phép cộng, trừ chính xác. Luyện tập thêm để giải nhanh hơn"
-- VÍ DỤ SAI:
-  ❌ "Em hoàn thành bài tập, đạt mức H" (chung chung)
-  ❌ "Em làm bài rất tốt" (không nêu cụ thể kỹ năng)
-  ❌ "Em hoàn thành, tính chính xác" (chỉ khen, không có hướng phát huy)
 
 ✅ MỨC Đ (ĐẠT) - ViewMode Không phải SUBJECT:
 - Khen em đã đạt yêu cầu
 - BẮT BUỘC phải nêu hướng phát huy, không được chỉ khen
-- VÍ DỤ ĐÚNG:
-  ✅ "Em tham gia tích cực vào hoạt động tập thể, hỗ trợ bạn. Tiếp tục phát huy tinh thần đoàn kết"
-  ✅ "Em giao tiếp tốt với bạn, hợp tác trong hoạt động nhóm. Hãy tiếp tục rèn luyện kỹ năng này"
-- VÍ DỤ SAI:
-  ❌ "Em đạt mức Đ" (chung chung)
-  ❌ "Em tham gia tập thể" (không có hướng phát huy)
-  ❌ "Em làm tốt" (không cụ thể)
 
 ❌ MỨC C (CHƯA ĐẠT):
 - KHÔNG KHEN quá nhiều, chỉ khen RẤT NHẸ nếu em có nỗ lực rõ ràng
 - Nêu CỤ THỂ 1-2 vấn đề chính (KHÔNG nêu cả đống vấn đề)
 - BẮT BUỘC phải nêu HƯỚNG KHẮC PHỤC cụ thể, dễ thực hiện
 - Không được chỉ nêu vấn đề mà không có cách cải thiện
-
-VÍ DỤ ĐÚNG (CÓ KHEN NHẸ):
-  ✅ "Em cố gắng hoàn thành bài tập nhưng chưa đúng. Còn nhầm lẫn phép cộng, trừ. Hãy luyện bài cơ bản, dùng que tính để đếm"
-  ✅ "Em tham gia tích cực nhưng chưa hiểu ý chính bài. Hãy đọc lại 2-3 lần, kể lại bằng lời"
-  
-VÍ DỤ SAI:
-  ❌ "Em chưa đạt, cần cố gắng hơn" (chung chung, không cụ thể)
-  ❌ "Em có nhiều vấn đề: viết xấu, đọc chậm" (quá nhiều vấn đề)
-  ❌ "Em còn chậm, còn nhầm, chưa giỏi" (không có hướng khắc phục)
-  ❌ "Em kém quá" (quá tiêu cực)
-  ❌ "Em chưa đạt nhưng có cố gắng" (chỉ khen, không nêu vấn đề cụ thể)
-
-QUY TẮC VIẾT MỨC C:
-1. Nêu VẤN ĐỀ cụ thể (1-2 cái, không quá nhiều)
-2. Nêu HƯỚNG KHẮC PHỤC cụ thể (BẮT BUỘC)
-3. Có thể khen nhẹ ở ĐẦU nếu em có nỗ lực (VD: "em cố gắng, tham gia tích cực")
-4. Tránh từ tiêu cực: "kém", "xấu", "không được"
-5. Không khen quá làm mất đi ý nghĩa của mức C
 
 💡 VÍ DỤ NHẬN XÉT HOÀN CHỈNH CHO TIỂU HỌC:
 
