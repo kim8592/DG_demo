@@ -800,7 +800,6 @@ HƯỚNG DẪN VIẾT NHẬN XÉT HỌC SINH TIỂU HỌC:
 - Khen rõ ràng những kỹ năng/kiến thức cụ thể em đã nắm vững
 - Nêu những kết quả cụ thể em đạt được
 - TUYỆT ĐỐI KHÔNG nêu hướng cải thiện, không nêu "tiếp tục", "phát huy", "luyện thêm"
-- Chỉ viết những điểm tích cực, không có gợi ý gì
 - VÍ DỤ ĐÚNG:
   ✅ "Em vẽ hình theo mẫu rất đẹp và sáng tạo. Sản phẩm của em nổi bật với cách trang trí độc đáo"
   ✅ "Em đọc bài thơ lưu loát, phát âm đúng, hiểu rõ ý tình tác phẩm"
