@@ -310,7 +310,7 @@ QUY TẮC QUAN TRỌNG:
 - PHẢI viết 20-25 từ, rõ ràng, súc tích
 - Bắt đầu bằng "Em"
 - T: Khen rõ ràng + khẳng định khả năng
-- H/Đ: Khen + gợi ý phát huy tiếp
+- H/Đ: Khen rõ ràng + gợi ý phát huy tiếp
 - C: Khen cố gắng + chỉ rõ hạn chế + hướng khắc phục
 - Tích hợp ghi chú và từ khóa tự nhiên vào câu
 - XÓA tất cả dấu ngoặc [], dấu {}, v.v.
