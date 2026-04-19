@@ -772,7 +772,7 @@ const App = () => {
         'Em có tham gia học tập {keyword}. Hãy tiếp tục rèn luyện để đạt kết quả tốt hơn.',
         'Em bước đầu thực hiện được {keyword}. Cần ôn tập lại để nâng cao kỹ năng.',
         'Em có ý thức học {keyword}. Nên luyện tập thêm để tự tin hơn khi làm bài.',
-        'Em có cố gắng trong giờ h��c {keyword}. Cần chú ý rèn luyện thêm để tiến bộ hơn.',
+        'Em có cố gắng trong giờ học {keyword}. Cần chú ý rèn luyện thêm để tiến bộ hơn.',
         'Em đã tham gia học tập {keyword}. Hãy dành thêm thời gian luyện tập để cải thiện.',
         'Em có sự nỗ lực với {keyword}. Cần tiếp tục ôn luyện để đạt kết quả tốt hơn.',
         'Em đã cố gắng thực hiện {keyword}. Nên rèn luyện thêm để hoàn thiện hơn.',
@@ -968,27 +968,30 @@ const App = () => {
         }
       });
 
-      const systemPrompt = isSmAsMode
-        ? `Bạn là giáo viên tiểu học Việt Nam. SỬA LẠI nhận xét từ công việc/kỹ năng.
+     const systemPrompt = isSmAsMode
+      ? `Bạn là giáo viên tiểu học Việt Nam. SỬA LẠI nhận xét từ công việc/kỹ năng.
 HƯỚNG DẪN THEO MỨC:
   MỨC T: Khen điểm nổi bậc.
   MỨC H/Đ: Khen điểm nổi bật và nêu hướng phát huy.
   MỨC C: Khen cố gắng, nêu hạn chế, nêu hướng khắc phục.
 RULE QUAN TRỌNG: 
 - MỖI nhận xét PHẢI khác nhau hoàn toàn, không lặp
-- PHẢI có 15-20 từ
+- Nếu câu gốc sai chính tả, thiếu chữ, hoặc chưa rõ nghĩa → PHẢI tự hiểu và viết lại thành câu hoàn chỉnh, rõ nghĩa.
+- KHÔNG giữ nguyên câu sai.
+- PHẢI có 15-17 từ
 - Bắt đầu "Em"
-- T: Khen rõ, H/Đ: Khen + hướng phát huy, C: Khen nhẹ + hạn chế + cách sửa
 - Nếu có "(Ghi chú: ...)" thì TÍCH HỢP tự nhiên vào nhận xét, VÍ DỤ thay vì nói "nhẩm nhanh" ở cuối, hãy viết "với khả năng nhẩm nhanh rất tốt"
 - XÓA tất cả dấu ngoặc []
 - KHÔNG để "(Ghi chú: ...)" trong kết quả final
 - Không để response rỗng
-- OUTPUT MỖI EM 1 DÒNG: [ID]|||[Nhận xét 20-25 từ]`
-        : `Sửa lại các nhận xét tiểu học cho hay hơn, tự nhiên hơn.
+- OUTPUT MỖI EM 1 DÒNG: [ID]|||[Nhận xét 15-17 từ]`
+      : `Sửa lại các nhận xét tiểu học cho hay hơn, tự nhiên hơn.
 RULE QUAN TRỌNG:
 - MỖI nhận xét PHẢI khác nhau hoàn toàn, không lặp
+- Nếu câu gốc sai chính tả, thiếu chữ, hoặc chưa rõ nghĩa → PHẢI tự hiểu và viết lại thành câu hoàn chỉnh, rõ nghĩa.
+- KHÔNG giữ nguyên câu sai.
 - Giữ nguyên ý chính, mức đánh giá
-- PHẢI có 15-20 từ
+- PHẢI có 15-17 từ
 - Nếu có "(Ghi chú: ...)" thì TÍCH HỢP tự nhiên vào câu, VÍ DỤ thay vì nói "nhẩm nhanh" ở cuối, hãy viết "với khả năng nhẩm nhanh rất tốt"
 - XÓA tất cả dấu ngoặc [] và "(Ghi chú: ...)"
 - Không để response rỗng
