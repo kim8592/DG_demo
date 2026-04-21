@@ -1319,48 +1319,52 @@ IMPORTANT:
       )}
 
       {modalType && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
-          <div className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl border-t-8 border-indigo-600">
-            <h3 className="text-xl font-black uppercase text-slate-800 mb-6">{editItem ? "Sửa" : "Thêm"} {modalType === 'student' ? 'Học sinh' : 'Thông tin'}</h3>
-            {modalType === 'student' ? 
-              <textarea autoFocus className="w-full h-64 p-4 bg-slate-50 border-2 border-slate-300 rounded-xl mb-6 font-bold outline-none" placeholder="Danh sách tên (1 tên/dòng)..." value={bulkInput} onChange={e => setBulkInput(e.target.value)}/> 
-              : 
-              <input autoFocus className="w-full p-4 bg-slate-50 border-2 border-slate-300 rounded-xl font-bold mb-6 outline-none" value={inputValue} onChange={e => setInputValue(e.target.value)}/>
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
+    <div className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl border-t-8 border-indigo-600">
+      <h3 className="text-xl font-black uppercase text-slate-800 mb-6">{editItem ? "Sửa" : "Thêm"} {modalType === 'student' ? 'Học sinh' : 'Thông tin'}</h3>
+      {modalType === 'student' ? 
+        <textarea autoFocus className="w-full h-64 p-4 bg-slate-50 border-2 border-slate-300 rounded-xl mb-6 font-bold outline-none" placeholder="Danh sách tên (1 tên/dòng)..." value={bulkInput} onChange={e => setBulkInput(e.target.value)}/> 
+        : 
+        <input autoFocus className="w-full p-4 bg-slate-50 border-2 border-slate-300 rounded-xl font-bold mb-6 outline-none" value={inputValue} onChange={e => setInputValue(e.target.value)}/>
+      }
+      <div className="flex gap-4">
+        <button onClick={() => setModalType(null)} disabled={isSaving} className="flex-1 py-4 font-black text-slate-400 uppercase text-[10px] disabled:opacity-50">Đóng</button>
+        {!isSaving && <button onClick={async () => {
+          try {
+            setIsSaving(true);
+            if (modalType === 'student') {
+              const names = bulkInput.split('\n').map(n => n.trim()).filter(n => n !== '');
+              const col = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years').doc(selectedYearId)
+                .collection('classes').doc(selectedClassId).collection('students');
+              for (const name of names) {
+                await col.add({ name, status: 'active', createdAt: Date.now() });
+              }
+              showToast(`Đã thêm ${names.length} học sinh thành công`, 'success', '✅', 3000);
+            } else {
+              const colName = modalType === 'year' ? 'years' : modalType === 'class' ? 'classes' : modalType === 'month' ? 'months' : 'subjects';
+              const col = db.collection('artifacts').doc(appId).collection('public').doc('data').collection(colName);
+              if (editItem) {
+                await col.doc(editItem.id).update({ name: inputValue });
+                showToast('Cập nhật thành công', 'success', '✅', 3000);
+              } else {
+                await col.add({ name: inputValue, createdAt: Date.now() });
+                showToast('Thêm mới thành công', 'success', '✅', 3000);
+              }
             }
-            <div className="flex gap-4">
-              <button onClick={() => setModalType(null)} className="flex-1 py-4 font-black text-slate-400 uppercase text-[10px]">Đóng</button>
-              <button onClick={async () => {
-                try {
-                  if (modalType === 'student') {
-                    const names = bulkInput.split('\n').map(n => n.trim()).filter(n => n !== '');
-                    const col = db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('years').doc(selectedYearId)
-                      .collection('classes').doc(selectedClassId).collection('students');
-                    for (const name of names) {
-                      await col.add({ name, status: 'active', createdAt: Date.now() });
-                    }
-                    showToast(`Đã thêm ${names.length} học sinh thành công`, 'success', '✅', 3000);
-                  } else {
-                    const colName = modalType === 'year' ? 'years' : modalType === 'class' ? 'classes' : modalType === 'month' ? 'months' : 'subjects';
-                    const col = db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection(colName);
-                    if (editItem) {
-                      await col.doc(editItem.id).update({ name: inputValue });
-                      showToast('Cập nhật thành công', 'success', '✅', 3000);
-                    } else {
-                      await col.add({ name: inputValue, createdAt: Date.now() });
-                      showToast('Thêm m��i thành công', 'success', '✅', 3000);
-                    }
-                  }
-                  setInputValue(''); 
-                  setBulkInput(''); 
-                  setModalType(null);
-                } catch (e) {
-                  showToast('Lỗi: ' + e.message, 'error', '❌', 4000);
-                }
-              }} className="flex-[2] py-4 bg-indigo-600 text-white font-black rounded-xl uppercase text-[10px]">Lưu</button>
-            </div>
-          </div>
-        </div>
-      )}
+            setInputValue(''); 
+            setBulkInput(''); 
+            setModalType(null);
+          } catch (e) {
+            showToast('Lỗi: ' + e.message, 'error', '❌', 4000);
+          } finally {
+            setIsSaving(false);
+          }
+        }} className="flex-[2] py-4 bg-indigo-600 text-white font-black rounded-xl uppercase text-[10px]">Lưu</button>}
+        {isSaving && <div className="flex-[2] py-4 bg-slate-400 text-white font-black rounded-xl uppercase text-[10px] flex items-center justify-center">⏳ Đang lưu...</div>}
+      </div>
+    </div>
+  </div>
+)}
 
       {confirmDelete && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm">
