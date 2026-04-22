@@ -1,7 +1,6 @@
 {
   "short_name": "DGTH",
-  "name": "Hệ thống Nhận xét Giáo viên",
-  "icons": [
+   "icons": [
     {
       "src": "logo.png",
       "type": "image/png",
