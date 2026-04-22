@@ -997,7 +997,7 @@ IMPORTANT:
         <div className="w-full flex flex-col lg:flex-row justify-between items-center gap-6 px-4">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-white/20 rounded-xl">
-              <img src="./logo.png" className="w-9 h-9" alt="Logo" />
+              <img src="./robot.png" className="w-9 h-9" alt="Logo" />
             </div>
             <div className="flex flex-col">
               <h1 className="text-xl md:text-2xl font-black uppercase leading-none tracking-tight">ĐÁNH GIÁ THƯỜNG XUYÊN</h1>
