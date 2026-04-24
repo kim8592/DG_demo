@@ -716,9 +716,10 @@ RULES:
 4. Write DIFFERENT comments for each student
 5. Be specific about skills and knowledge
 6. Each comment should be 1-2 sentences
+7. Automatically detect and correct spelling and grammar errors in the input before generating comments
 
 LEVELS:
-- T (Tot/Excellent): Praise clearly, do NOT mention improvement
+- T (Tot/Excellent): Praise clearly
 - H or D (Hoan thanh/Complete or Dat/Achieved): Praise + must mention improvement direction
 - C (Chua dat/Not yet): State the problem + solution
 
@@ -737,7 +738,7 @@ IMPORTANT:
 
     console.log('📢 Calling Gemini API...');
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
