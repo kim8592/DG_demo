@@ -774,7 +774,7 @@ const App = () => {
           contents: [{ parts: [{ text: userInstruction }] }], 
           systemInstruction: { parts: [{ text: AI_PROMPTS.system }] },
           generationConfig: { 
-            temperature: 0.2, // Giảm để AI ổn định hơn
+            temperature: 0.1, // Giảm để AI ổn định hơn
             maxOutputTokens: 8000 // Giảm để tiết kiệm token
           }
         })
