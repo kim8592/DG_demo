@@ -121,7 +121,7 @@ const processComment = (comment, level) => {
     .replace(/\s+/g, ' ').trim()
     .replace(/^[,\s]+/, '');
 
-  // Chuẩn hóa câu
+   // Chuẩn hóa câu
   comment = comment.replace(/\s+/g, ' ').trim();
   if (!/[.!?]$/.test(comment)) comment += ".";
 
@@ -131,30 +131,172 @@ const processComment = (comment, level) => {
 
   // Xử lý theo mức
   if (level === "T") {
-    if (hasDevelopment) {
-      comment = comment.split(/\bnhưng\b|\btuy nhiên\b|\bsong\b/i)[0].trim();
-      comment = comment.split(/\bcần\b|\bcố gắng\b|\bkhắc phục\b|\brèn luyện\b/i)[0].trim();
-    }
+if (hasDevelopment) {
+  comment = comment.replace(
+    /[\s,.]*(nhưng|tuy nhiên|song|cần|nên|thêm|tiếp tục|chú ý|cố gắng|khắc phục|rèn luyện).*/i,
+    ""
+  ).trim();
+
+  // dọn câu dang dở
+  comment = comment.replace(/\b(và|luôn|nhưng|cũng|đều)\s*$/i, "");
+  comment = comment.replace(/[,:;]\s*$/g, "");
+  comment = comment.trim();
+
+  if (!/[.!?]$/.test(comment)) comment += ".";
+}
+
     if (isBroken) {
       const goodList = ["Em học tập tích cực và tiếp thu kiến thức rất nhanh.", "Em nắm vững kiến thức và thể hiện sự tiến bộ rõ rệt.", "Em có khả năng học tập tốt và luôn hoàn thành nhiệm vụ.", "Em chăm chỉ và đạt nhiều kết quả đáng khen.", "Em tiếp thu nhanh và vận dụng kiến thức hiệu quả."];
       comment = goodList[Math.floor(Math.random() * goodList.length)];
     }
-    if (!/rất tốt|nổi bật|đáng khen|đáng ghi nhận/i.test(comment)) {
-      comment += " Em thể hiện rất tốt, đáng khen.";
-    }
-  } else if (level === "H" || level === "Đ") {
-    if (!hasDevelopment) {
-      if (isPraise) {
-        const encourages = ["Em có thể thử sức với các bài nâng cao hơn.", "Em rèn luyện thêm để nâng cao tốc độ và độ chính xác.", "Em tiếp tục mở rộng kiến thức với dạng bài khó hơn.", "Em phát triển khả năng bằng luyện tập thường xuyên."];
-        comment += " " + encourages[Math.floor(Math.random() * encourages.length)];
-      }
-    }
-  } else if (level === "C") {
-    if (!hasDevelopment) {
-      const supports = ["Em cần luyện tập thêm để cải thiện.", "Em còn hạn chế, cần rèn luyện thêm.", "Em nên cố gắng hơn để nắm vững kiến thức.", "Cần chú ý rèn luyện để tiến bộ hơn."];
-      comment += " " + supports[Math.floor(Math.random() * supports.length)];
-    }
+   if (
+   !/đáng khen|đáng ghi nhận|xuất sắc|nổi bật/i.test(comment)
+   || comment.length < 65
+) {
+
+  const praiseEnds = [
+    "thể hiện rất tốt, đáng khen!",
+    "có nhiều cố gắng đáng ghi nhận.",
+    "cho thấy sự chăm chỉ rõ rệt.",
+    "là tấm gương học tập tốt.",
+    "xứng đáng được tuyên dương!",
+    "đem lại kết quả học tập tích cực.",
+    "thể hiện tinh thần học tập rất tốt.",
+    "có ý thức học tập đáng biểu dương!",
+    "đạt kết quả nổi bật trong học tập.",
+    "có nhiều nỗ lực rất đáng khen!"
+  ];
+
+  comment = comment.replace(/[.!?]\s*$/, "");
+
+  const endText = praiseEnds[Math.floor(Math.random() * praiseEnds.length)];
+
+  comment += ", " + endText;
+}
+
+ } else if (level === "H" || level === "Đ") {
+
+  // =========================
+  // 1. HẠ TONE
+  // =========================
+  comment = comment.replace(/rất tốt/gi, "tốt");
+  comment = comment.replace(/xuất sắc/gi, "tốt");
+  comment = comment.replace(/nổi bật/gi, "đáng ghi nhận");
+  comment = comment.replace(/tiến bộ rõ rệt/gi, "có tiến bộ");
+  comment = comment.replace(/rất chính xác/gi, "khá chính xác");
+ // 2. XOÁ HOÀN TOÀN "TUY NHIÊN" (GỘP CÂU CHO MƯỢT)
+  // =========================
+  comment = comment
+    .replace(/,\s*tuy nhiên,?\s*/gi, ". ")
+    .replace(/\.\s*tuy nhiên,?\s*/gi, ". ")
+    .replace(/\s+tuy nhiên,?\s*/gi, ". ");
+  // =========================
+  // 2. CHỈ THÊM "TIẾP TỤC" KHI CẦN THIẾT (AN TOÀN)
+  // =========================
+  comment = comment.replace(
+    /(\.|,|\s)cần\s(?=rèn|phát huy|chú ý|luyện|cố gắng)/gi,
+    "$1tiếp tục "
+  );
+
+  // =========================
+  // 3. CHỐNG LẶP "TIẾP TỤC"
+  // =========================
+  comment = comment.replace(/tiếp tục\s+tiếp tục/gi, "tiếp tục");
+  comment = comment.replace(/Tiếp tục\s+tiếp tục/gi, "Tiếp tục");
+
+  // =========================
+  // 4. THÊM HƯỚNG PHÁT HUY NẾU CHƯA CÓ
+  // =========================
+  if (!/tiếp tục|phát huy|rèn luyện|cố gắng|duy trì|nâng cao/i.test(comment)) {
+
+    const encourages = [
+      "Em tiếp tục phát huy nhé.",
+      "Em tiếp tục cố gắng để tiến bộ hơn.",
+      "Em duy trì tinh thần học tập tích cực nhé.",
+      "Em tiếp tục rèn luyện để đạt kết quả tốt hơn.",
+      "Em cố gắng thêm để ngày càng tiến bộ.",
+      "Em phát huy khả năng của mình hơn nữa."
+    ];
+
+    comment = comment.replace(/[.!?]\s*$/, "");
+
+    const endText =
+      encourages[Math.floor(Math.random() * encourages.length)];
+
+    comment += ". " + endText;
   }
+
+
+ } else if (level === "C") {
+
+  // =========================
+  // 1. MỞ ĐẦU (khen nhẹ, tự nhiên)
+  // =========================
+  comment = comment.replace(/^Em làm tốt/gi, "Em có cố gắng trong quá trình thực hiện");
+  comment = comment.replace(/^Em làm/gi, "Em đã có cố gắng thực hiện");
+  comment = comment.replace(/^Em có/gi, "Em bước đầu có cố gắng");
+  comment = comment.replace(/^Em đã/gi, "Em đã có cố gắng");
+
+  // =========================
+  // 2. HẠ TONE (tránh giống H)
+  // =========================
+  comment = comment.replace(/rất tốt/gi, "đạt yêu cầu cơ bản");
+  comment = comment.replace(/xuất sắc/gi, "đã có tiến bộ");
+  comment = comment.replace(/nổi bật/gi, "có tiến bộ");
+  comment = comment.replace(/rất chính xác/gi, "chưa thật chính xác");
+  comment = comment.replace(/\btốt\b/gi, "đạt yêu cầu");
+  comment = comment.replace(/\bchính xác\b/gi, "tương đối chính xác");
+
+  // =========================
+  // 3. FIX CÁC LỖI “CẤN CÂU”
+  // =========================
+  comment = comment.replace(/cố gắng trong thể hiện/gi, "có cố gắng thể hiện");
+  comment = comment.replace(/trong thể hiện/gi, "trong việc thể hiện");
+  comment = comment.replace(/cố gắng có sự cố gắng/gi, "có cố gắng");
+  comment = comment.replace(/có sự cố gắng/gi, "có cố gắng");
+  comment = comment.replace(/cố gắng có tiến bộ/gi, "cố gắng, có tiến bộ");
+  comment = comment.replace(/có cố gắng có tiến bộ/gi, "có cố gắng, có tiến bộ");
+
+
+  // chống lặp từ
+  comment = comment.replace(/cố gắng\s+cố gắng/gi, "cố gắng");
+
+  // bỏ từ nối gây giống H
+  comment = comment.replace(/tuy nhiên,?/gi, "");
+
+  // =========================
+  // 4. THÊM GÓP Ý CUỐI (nếu thiếu)
+  // =========================
+  if (!/cần|nên|chú ý|rèn luyện|cố gắng/i.test(comment)) {
+
+    const supports = [
+      "Em cần luyện tập thêm để cải thiện kỹ năng.",
+      "Em nên rèn luyện thêm để nắm vững kiến thức.",
+      "Em cần chú ý hơn trong quá trình làm bài.",
+      "Em nên luyện tập thường xuyên hơn để tiến bộ.",
+      "Em cố gắng thêm để hoàn thiện bài làm tốt hơn."
+    ];
+
+    comment = comment.replace(/[.!?]\s*$/, "");
+
+    const endText =
+      supports[Math.floor(Math.random() * supports.length)];
+
+    comment += ". " + endText;
+  }
+
+  // =========================
+  // 5. VIẾT HOA SAU DẤU CÂU
+  // =========================
+  comment = comment.replace(
+    /([.!?]\s*)([a-zà-ỹ])/g,
+    (m, p1, p2) => p1 + p2.toUpperCase()
+  );
+
+  comment =
+    comment.charAt(0).toUpperCase() + comment.slice(1);
+}
+
 
   return comment.replace(/\s+/g, ' ').trim();
 };
