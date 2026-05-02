@@ -910,15 +910,15 @@ const App = () => {
 
       const userInstruction = AI_PROMPTS.user(studentListText, aiPrompt);
 
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           contents: [{ parts: [{ text: userInstruction }] }], 
           systemInstruction: { parts: [{ text: AI_PROMPTS.system }] },
           generationConfig: { 
-            temperature: 0.3, // Giảm để AI ổn định hơn
-            maxOutputTokens: 2000 // Giảm để tiết kiệm token
+            temperature: 0.2, // Giảm để AI ổn định hơn
+            maxOutputTokens: 6000 // Giảm để tiết kiệm token
           }
         })
       });
