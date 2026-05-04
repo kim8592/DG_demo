@@ -259,7 +259,7 @@ if (hasDevelopment) {
   comment = comment.replace(/\bchính xác\b/gi, "tương đối chính xác");
 
   // =========================
-  // 3. FIX CÁC LỖI "CẤN CÂU"
+  // 3. FIX CÁC LỖI “CẤN CÂU”
   // =========================
   comment = comment.replace(/cố gắng trong thể hiện/gi, "có cố gắng thể hiện");
   comment = comment.replace(/trong thể hiện/gi, "trong việc thể hiện");
