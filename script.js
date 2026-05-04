@@ -536,9 +536,9 @@ const App = () => {
   useEffect(() => {
     if (!user || !isAuthValid) return;
     try {
-      const unsubYears = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years')
+      const unsubYears = db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('data').collection('years')
         .onSnapshot(s => setYears(s.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))));
-      const unsubCla = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('classes')
+      const unsubCla = db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('data').collection('classes')
         .onSnapshot(s => setClasses(s.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => a.name.localeCompare(b.name, 'vi', { numeric: true }))));
       const unsubMon = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('months')
         .onSnapshot(s => setMonths(s.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))));
@@ -639,7 +639,8 @@ const App = () => {
     }
     
     try {
-      return db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key)
+      return db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('data').collection('comments')
+.doc(key)
         .collection('entries').onSnapshot((snap) => {
           const data = {};
           snap.forEach(doc => { data[doc.id] = doc.data(); });
