@@ -638,19 +638,25 @@ const App = () => {
       key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
     }
     
-   try {
-      // Thêm .where('owner', '==', user.uid) để lọc dữ liệu theo người dùng hiện tại
-      return db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key)
+  try {
+      // Thêm .where('owner', '==', user.uid)
+      const query = db.collection('artifacts').doc(appId)
+        .collection('public').doc('data')
+        .collection('comments').doc(key)
         .collection('entries')
-        .where('owner', '==', user.uid) // <-- Dòng quan trọng nhất ở đây
-        .onSnapshot((snap) => {
-          const data = {};
-          snap.forEach(doc => { 
-            data[doc.id] = doc.data(); 
-          });
-          setStudentData(data);
-          setDraftData({});
+        .where('owner', '==', user.uid); // QUAN TRỌNG: Chỉ lấy dữ liệu của tôi
+
+      return query.onSnapshot((snap) => {
+        const data = {};
+        snap.forEach(doc => { 
+          data[doc.id] = doc.data(); 
         });
+        setStudentData(data);
+        setDraftData({});
+      }, (error) => {
+        // Nếu thiếu Index, link tạo sẽ hiện ở đây (Console F12)
+        console.error("Lỗi Firestore:", error);
+      });
     } catch (e) {
       console.error('Student data load error:', e);
     }
