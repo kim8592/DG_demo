@@ -536,16 +536,36 @@ const App = () => {
   useEffect(() => {
     if (!user || !isAuthValid) return;
     try {
-      const unsubYears = db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('data').collection('years')
-        .onSnapshot(s => setYears(s.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))));
-      const unsubCla = db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('data').collection('classes')
-        .onSnapshot(s => setClasses(s.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => a.name.localeCompare(b.name, 'vi', { numeric: true }))));
-      const unsubMon = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('months')
-        .onSnapshot(s => setMonths(s.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))));
-      const unsubSub = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('subjects')
-        .onSnapshot(s => setSubjects(s.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => a.name.localeCompare(b.name, 'vi'))));
-      return () => { unsubYears(); unsubCla(); unsubMon(); unsubSub(); };
-    } catch (e) {
+  const unsubYears = db.collection('artifacts')
+    .doc(appId)
+    .collection('users')
+    .doc(user.uid)
+    .collection('years')
+    .onSnapshot(...);
+
+  const unsubCla = db.collection('artifacts')
+    .doc(appId)
+    .collection('users')
+    .doc(user.uid)
+    .collection('classes')
+    .onSnapshot(...);
+
+  const unsubMon = db.collection('artifacts')
+    .doc(appId)
+    .collection('public')
+    .doc('data')
+    .collection('months')
+    .onSnapshot(...);
+
+  const unsubSub = db.collection('artifacts')
+    .doc(appId)
+    .collection('public')
+    .doc('data')
+    .collection('subjects')
+    .onSnapshot(...);
+
+} catch(e){}
+
       console.error('Data load error:', e);
     }
   }, [user, isAuthValid]);
@@ -638,18 +658,29 @@ const App = () => {
       key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
     }
     
-    try {
-      return db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('data').collection('comments')
-.doc(key)
-        .collection('entries').onSnapshot((snap) => {
-          const data = {};
-          snap.forEach(doc => { data[doc.id] = doc.data(); });
-          setStudentData(data);
-          setDraftData({});
-        });
-    } catch (e) {
-      console.error('Student data load error:', e);
-    }
+   try {
+  return db.collection('artifacts')
+    .doc(appId)
+    .collection('users')
+    .doc(user.uid)
+    .collection('comments')
+    .doc(key)
+    .collection('entries')
+    .onSnapshot((snap) => {
+      const data = {};
+
+      snap.forEach((doc) => {
+        data[doc.id] = doc.data();
+      });
+
+      setStudentData(data);
+      setDraftData({});
+    });
+
+} catch (e) {
+  console.error('Student data load error:', e);
+}
+
   }, [user, selectedSubId, selectedCriteriaId, selectedMonthId, selectedClassId, selectedYearId, viewMode, isAuthValid, systemMode]);
 
   // ===== FUNCTIONS =====
@@ -681,47 +712,88 @@ const App = () => {
       setShowMoveTargetSelect(true);
       return;
     }
-    try {
-      await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years').doc(selectedYearId)
-        .collection('classes').doc(selectedClassId).collection('students').doc(studentId).update({ status });
-      setStatusModalStudent(null);
-      showToast('Cập nhật trạng thái thành công', 'success', '✅', 3000);
-    } catch (e) { 
-      console.error(e); 
-      showToast('Lỗi cập nhật trạng thái: ' + e.message, 'error', '❌', 4000);
-    }
-  }, [selectedYearId, selectedClassId, showToast]);
+   try {
+  await db.collection('artifacts')
+    .doc(appId)
+    .collection('users')
+    .doc(user.uid)
+    .collection('years')
+    .doc(selectedYearId)
+    .collection('classes')
+    .doc(selectedClassId)
+    .collection('students')
+    .doc(studentId)
+    .update({ status });
 
-  const handleMoveStudentToClass = useCallback(async (targetClassId) => {
-    if (!statusModalStudent || !targetClassId || isMoving) return;
-    setIsMoving(true);
-    try {
-      const batch = db.batch();
-      const newStudentRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years').doc(selectedYearId)
-        .collection('classes').doc(targetClassId).collection('students').doc();
-      batch.set(newStudentRef, {
-        name: statusModalStudent.name,
-        status: 'active',
-        createdAt: statusModalStudent.createdAt || Date.now(),
-        movedFrom: selectedClassId
-      });
-      const oldStudentRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years').doc(selectedYearId)
-        .collection('classes').doc(selectedClassId).collection('students').doc(statusModalStudent.id);
-      batch.delete(oldStudentRef);
-      await batch.commit();
-      setStatusModalStudent(null);
-      setShowMoveTargetSelect(false);
-      showToast('Di chuyển học sinh thành công', 'success', '✅', 3000);
-    } catch (e) { 
-      console.error("Lỗi di chuyển học sinh:", e); 
-      showToast('Lỗi di chuyển: ' + e.message, 'error', '❌', 4000);
-    } finally { setIsMoving(false); }
-  }, [statusModalStudent, selectedYearId, selectedClassId, isMoving, showToast]);
+  setStatusModalStudent(null);
+  showToast('Cập nhật trạng thái thành công', 'success', '✅', 3000);
 
-  const handleDragStart = useCallback((e, studentId) => {
-    setDraggedStudentId(studentId);
-    e.dataTransfer.effectAllowed = "move";
-  }, []);
+} catch (e) {
+  console.error(e);
+  showToast('Lỗi cập nhật trạng thái: ' + e.message, 'error', '❌', 4000);
+}
+}, [selectedYearId, selectedClassId, showToast]);
+
+const handleMoveStudentToClass = useCallback(async (targetClassId) => {
+  if (!statusModalStudent || !targetClassId || isMoving) return;
+
+  setIsMoving(true);
+
+  try {
+    const batch = db.batch();
+
+    const newStudentRef = db.collection('artifacts')
+      .doc(appId)
+      .collection('users')
+      .doc(user.uid)
+      .collection('years')
+      .doc(selectedYearId)
+      .collection('classes')
+      .doc(targetClassId)
+      .collection('students')
+      .doc();
+
+    batch.set(newStudentRef, {
+      name: statusModalStudent.name,
+      status: 'active',
+      createdAt: statusModalStudent.createdAt || Date.now(),
+      movedFrom: selectedClassId
+    });
+
+    const oldStudentRef = db.collection('artifacts')
+      .doc(appId)
+      .collection('users')
+      .doc(user.uid)
+      .collection('years')
+      .doc(selectedYearId)
+      .collection('classes')
+      .doc(selectedClassId)
+      .collection('students')
+      .doc(statusModalStudent.id);
+
+    batch.delete(oldStudentRef);
+
+    await batch.commit();
+
+    setStatusModalStudent(null);
+    setShowMoveTargetSelect(false);
+    showToast('Di chuyển học sinh thành công', 'success', '✅', 3000);
+
+  } catch (e) {
+    console.error("Lỗi di chuyển học sinh:", e);
+    showToast('Lỗi di chuyển: ' + e.message, 'error', '❌', 4000);
+
+  } finally {
+    setIsMoving(false);
+  }
+
+}, [statusModalStudent, selectedYearId, selectedClassId, isMoving, showToast]);
+
+const handleDragStart = useCallback((e, studentId) => {
+  setDraggedStudentId(studentId);
+  e.dataTransfer.effectAllowed = "move";
+}, []);
+
 
   const handleDragOver = useCallback((e, studentId) => {
     e.preventDefault();
@@ -761,23 +833,39 @@ const App = () => {
     newList.splice(draggedIndex, 1);
     newList.splice(targetIndex, 0, draggedStudent);
 
-    try {
-      const batch = db.batch();
-      newList.forEach((stu, i) => {
-        const ref = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years').doc(selectedYearId)
-          .collection('classes').doc(selectedClassId).collection('students').doc(stu.id);
-        batch.update(ref, { order: i });
-      });
-      await batch.commit();
-      showToast('Sắp xếp học sinh thành công', 'success', '✅', 2000);
-    } catch (e) { 
-      console.error("Lỗi sắp xếp:", e); 
-      showToast('Lỗi sắp xếp: ' + e.message, 'error', '❌', 4000);
-    } finally {
-      setDraggedStudentId(null);
-      setDragOverStudentId(null);
-    }
-  }, [draggedStudentId, students, selectedYearId, selectedClassId, showToast]);
+   try {
+  const batch = db.batch();
+
+  newList.forEach((stu, i) => {
+    const ref = db.collection('artifacts')
+      .doc(appId)
+      .collection('users')
+      .doc(user.uid)
+      .collection('years')
+      .doc(selectedYearId)
+      .collection('classes')
+      .doc(selectedClassId)
+      .collection('students')
+      .doc(stu.id);
+
+    batch.update(ref, { order: i });
+  });
+
+  await batch.commit();
+
+  showToast('Sắp xếp học sinh thành công', 'success', '✅', 2000);
+
+} catch (e) {
+  console.error("Lỗi sắp xếp:", e);
+  showToast('Lỗi sắp xếp: ' + e.message, 'error', '❌', 4000);
+
+} finally {
+  setDraggedStudentId(null);
+  setDragOverStudentId(null);
+}
+
+}, [draggedStudentId, students, selectedYearId, selectedClassId, showToast]);
+
 
   const handleSaveAllToFirebase = useCallback(async () => {
     const studentIds = Object.keys(draftData);
@@ -791,7 +879,13 @@ const App = () => {
       else if (isVnEduSubMode) key = `${selectedYearId}_${viewMode}_vnedu_${selectedCriteriaId}_${selectedMonthId}_${selectedClassId}`;
       else key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
 
-      const docRefCheck = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key);
+     const docRefCheck = db.collection('artifacts')
+      .doc(appId)
+      .collection('users')
+      .doc(user.uid)
+      .collection('comments')
+      .doc(key);
+
       const entriesSnap = await docRefCheck.collection('entries').limit(1).get();
 
       if (!entriesSnap.empty) {
@@ -807,8 +901,15 @@ const App = () => {
 
       const batch = db.batch();
       for (const sId of studentIds) {
-        const docRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key)
-          .collection('entries').doc(sId);
+        const docRef = db.collection('artifacts')
+        .doc(appId)
+        .collection('users')
+        .doc(user.uid)
+        .collection('comments')
+        .doc(key)
+        .collection('entries')
+        .doc(sId);
+
         const updates = draftData[sId];
         batch.set(docRef, {
           ...updates,
@@ -831,8 +932,15 @@ const App = () => {
               compKey = `${selectedYearId}_specific_vnedu_${targetCompId}_${selectedMonthId}_${selectedClassId}`;
               compField = "level";
             }
-            const compDocRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(compKey)
-              .collection('entries').doc(sId);
+           const compDocRef = db.collection('artifacts')
+              .doc(appId)
+              .collection('users')
+              .doc(user.uid)
+              .collection('comments')
+              .doc(compKey)
+              .collection('entries')
+              .doc(sId);
+
             batch.set(compDocRef, { 
               [compField]: compLevelValue,
               lastModified: new Date().toISOString()
@@ -1495,31 +1603,79 @@ const App = () => {
                   setIsSaving(true);
                   if (modalType === 'student') {
                     const names = bulkInput.split('\n').map(n => n.trim()).filter(n => n !== '');
-                    const col = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years').doc(selectedYearId)
-                      .collection('classes').doc(selectedClassId).collection('students');
-                    for (const name of names) {
-                      await col.add({ name, status: 'active', createdAt: Date.now() });
-                    }
-                    showToast(`Đã thêm ${names.length} học sinh thành công`, 'success', '✅', 3000);
-                  } else {
-                    const colName = modalType === 'year' ? 'years' : modalType === 'class' ? 'classes' : modalType === 'month' ? 'months' : 'subjects';
-                    const col = db.collection('artifacts').doc(appId).collection('public').doc('data').collection(colName);
-                    if (editItem) {
-                      await col.doc(editItem.id).update({ name: inputValue });
-                      showToast('Cập nhật thành công', 'success', '✅', 3000);
-                    } else {
-                      await col.add({ name: inputValue, createdAt: Date.now() });
-                      showToast('Thêm mới thành công', 'success', '✅', 3000);
-                    }
-                  }
-                  setInputValue(''); 
-                  setBulkInput(''); 
-                  setModalType(null);
-                } catch (e) {
-                  showToast('Lỗi: ' + e.message, 'error', '❌', 4000);
-                } finally {
-                  setIsSaving(false);
-                }
+                   const col = db.collection('artifacts')
+.doc(appId)
+.collection('users')
+.doc(user.uid)
+.collection('years')
+.doc(selectedYearId)
+.collection('classes')
+.doc(selectedClassId)
+.collection('students');
+
+                   for (const name of names) {
+  await col.add({
+    name,
+    status: 'active',
+    createdAt: Date.now()
+  });
+}
+
+showToast(`Đã thêm ${names.length} học sinh thành công`, 'success', '✅', 3000);
+
+} else {
+
+  const colName =
+    modalType === 'year' ? 'years' :
+    modalType === 'class' ? 'classes' :
+    modalType === 'month' ? 'months' :
+    'subjects';
+
+  let col;
+
+  if (colName === 'classes' || colName === 'years') {
+    col = db.collection('artifacts')
+      .doc(appId)
+      .collection('users')
+      .doc(user.uid)
+      .collection(colName);
+  } else {
+    col = db.collection('artifacts')
+      .doc(appId)
+      .collection('public')
+      .doc('data')
+      .collection(colName);
+  }
+
+  if (editItem) {
+    await col.doc(editItem.id).update({
+      name: inputValue
+    });
+
+    showToast('Cập nhật thành công', 'success', '✅', 3000);
+
+  } else {
+
+    await col.add({
+      name: inputValue,
+      createdAt: Date.now()
+    });
+
+    showToast('Thêm mới thành công', 'success', '✅', 3000);
+  }
+}
+
+setInputValue('');
+setBulkInput('');
+setModalType(null);
+
+} catch (e) {
+  showToast('Lỗi: ' + e.message, 'error', '❌', 4000);
+
+} finally {
+  setIsSaving(false);
+}
+
               }} className="flex-[2] py-4 bg-indigo-600 text-white font-black rounded-xl uppercase text-[10px]">Lưu</button>}
               {isSaving && <div className="flex-[2] py-4 bg-slate-400 text-white font-black rounded-xl uppercase text-[10px] flex items-center justify-center">⏳ Đang lưu...</div>}
             </div>
@@ -1537,17 +1693,52 @@ const App = () => {
               <button onClick={async () => {
                 try {
                   if (confirmDelete.type === 'student') {
-                    await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('years').doc(selectedYearId)
-                      .collection('classes').doc(selectedClassId).collection('students').doc(confirmDelete.id).delete();
-                  } else {
-                    const colName = confirmDelete.type === 'year' ? 'years' : confirmDelete.type === 'class' ? 'classes' : confirmDelete.type === 'month' ? 'months' : 'subjects';
-                    await db.collection('artifacts').doc(appId).collection('public').doc('data').collection(colName).doc(confirmDelete.id).delete();
-                  }
-                  setConfirmDelete(null);
-                  showToast('Xóa thành công', 'success', '✅', 3000);
-                } catch (e) {
-                  showToast('Lỗi xóa: ' + e.message, 'error', '❌', 4000);
-                }
+                   await db.collection('artifacts')
+.doc(appId)
+.collection('users')
+.doc(user.uid)
+.collection('years')
+.doc(selectedYearId)
+.collection('classes')
+.doc(selectedClassId)
+.collection('students')
+.doc(confirmDelete.id)
+.delete();
+
+                } else {
+
+  const colName =
+    confirmDelete.type === 'year' ? 'years' :
+    confirmDelete.type === 'class' ? 'classes' :
+    confirmDelete.type === 'month' ? 'months' :
+    'subjects';
+
+  let col;
+
+  if (colName === 'classes' || colName === 'years') {
+    col = db.collection('artifacts')
+      .doc(appId)
+      .collection('users')
+      .doc(user.uid)
+      .collection(colName);
+  } else {
+    col = db.collection('artifacts')
+      .doc(appId)
+      .collection('public')
+      .doc('data')
+      .collection(colName);
+  }
+
+  await col.doc(confirmDelete.id).delete();
+}
+
+setConfirmDelete(null);
+showToast('Xóa thành công', 'success', '✅', 3000);
+
+} catch (e) {
+  showToast('Lỗi xóa: ' + e.message, 'error', '❌', 4000);
+}
+
               }} className="flex-1 py-4 bg-red-600 text-white font-black rounded-xl uppercase text-[10px]">Xóa</button>
             </div>
           </div>
