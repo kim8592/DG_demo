@@ -793,27 +793,59 @@ const App = () => {
     }
   }, [draggedStudentId, students, selectedYearId, selectedClassId, showToast]);
 
-  const handleSaveAllToFirebase = useCallback(async () => {
-    const studentIds = Object.keys(draftData);
-    if (studentIds.length === 0) return;
-    setIsSaving(true);
-    try {
-      const systemSuffix = systemMode === 'vnedu' ? '_vnedu' : '';
-      const isVnEduSubMode = systemMode === 'vnedu' && viewMode !== 'subject';
-      let key = "";
-      if (viewMode === 'subject') key = `${selectedYearId}_${selectedSubId}_${selectedMonthId}_${selectedClassId}${systemSuffix}`;
-      else if (isVnEduSubMode) key = `${selectedYearId}_${viewMode}_vnedu_${selectedCriteriaId}_${selectedMonthId}_${selectedClassId}`;
-      else key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
+ const handleSaveAllToFirebase = useCallback(async () => {
+  const studentIds = Object.keys(draftData);
+  if (studentIds.length === 0) return;
+  setIsSaving(true);
 
-      const docRefCheck = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key);
-      const entriesSnap = await docRefCheck.collection('entries').limit(1).get();
+  try {
+    // 1. Giữ nguyên logic tạo 'key' để xác định đúng Lớp/Môn/Tháng
+    const systemSuffix = systemMode === 'vnedu' ? '_vnedu' : '';
+    const isVnEduSubMode = systemMode === 'vnedu' && viewMode !== 'subject';
+    let key = "";
+    if (viewMode === 'subject') {
+      key = `${selectedYearId}_${selectedSubId}_${selectedMonthId}_${selectedClassId}${systemSuffix}`;
+    } else if (isVnEduSubMode) {
+      key = `${selectedYearId}_${viewMode}_vnedu_${selectedCriteriaId}_${selectedMonthId}_${selectedClassId}`;
+    } else {
+      key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
+    }
 
-      if (!entriesSnap.empty) {
-        const first = entriesSnap.docs[0].data();
-        if (first.owner && first.owner !== user.uid) {
-          const ok = window.confirm(`⚠️ Môn này đang do "${first.ownerName || 'giáo viên khác'}" phụ trách.\n\nBạn có muốn nhận quyền để chỉnh sửa không?`);
-          if (!ok) {
-            setIsSaving(false);
+    // 2. Bắt đầu lưu dữ liệu riêng biệt (Thay thế cho đoạn docRefCheck cũ)
+    const batch = db.batch();
+    const timestamp = new Date().toISOString();
+
+    for (const studentId of studentIds) {
+      // TẠO ID DUY NHẤT: Kết hợp mã học sinh và UID của giáo viên
+      const uniqueDocId = `${studentId}_${user.uid}`; 
+      
+      const docRef = db.collection('artifacts').doc(appId)
+        .collection('public').doc('data')
+        .collection('comments').doc(key)
+        .collection('entries').doc(uniqueDocId); // Lưu vào ID duy nhất này
+
+      const updates = {
+        ...draftData[studentId],
+        studentId: studentId, 
+        owner: user.uid, // Đánh dấu chủ sở hữu để phục vụ lệnh lọc .where()
+        ownerName: user.displayName || user.email,
+        lastModified: timestamp
+      };
+
+      batch.set(docRef, updates, { merge: true });
+    }
+
+    await batch.commit();
+    setDraftData({}); // Xóa dữ liệu nháp sau khi lưu thành công
+    alert("Đã lưu dữ liệu cá nhân của bạn thành công!");
+
+  } catch (e) {
+    console.error("Save error:", e);
+    alert("Có lỗi xảy ra khi lưu dữ liệu.");
+  } finally {
+    setIsSaving(false);
+  }
+}, [draftData, user, appId, systemMode, viewMode, selectedYearId, selectedSubId, selectedMonthId, selectedClassId, selectedCriteriaId]);
             return;
           }
         }
