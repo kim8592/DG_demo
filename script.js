@@ -1086,7 +1086,7 @@ const App = () => {
           systemInstruction: { parts: [{ text: AI_PROMPTS.system }] },
           generationConfig: { 
             temperature: 0.3,
-            maxOutputTokens: 2000
+            maxOutputTokens: 3000
           }
         })
       });
