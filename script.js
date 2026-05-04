@@ -639,14 +639,18 @@ const App = () => {
     }
     
   try {
-      // Thêm .where('owner', '==', user.uid)
+      console.log("--- DEBUG LOG ---");
+      console.log("UID hiện tại:", user.uid); // Kiểm tra xem UID có đúng của tài khoản đang đăng nhập không
+      console.log("Key truy vấn:", key);
+
       const query = db.collection('artifacts').doc(appId)
         .collection('public').doc('data')
         .collection('comments').doc(key)
         .collection('entries')
-        .where('owner', '==', user.uid); // QUAN TRỌNG: Chỉ lấy dữ liệu của tôi
+        .where('owner', '==', user.uid); // Lệnh lọc chủ chốt
 
       return query.onSnapshot((snap) => {
+        console.log("Số lượng bản ghi tìm thấy cho riêng UID này:", snap.size); 
         const data = {};
         snap.forEach(doc => { 
           data[doc.id] = doc.data(); 
@@ -654,11 +658,11 @@ const App = () => {
         setStudentData(data);
         setDraftData({});
       }, (error) => {
-        // Nếu thiếu Index, link tạo sẽ hiện ở đây (Console F12)
-        console.error("Lỗi Firestore:", error);
+        // CỰC KỲ QUAN TRỌNG: Nếu thiếu Index hoặc sai Rules, lỗi sẽ hiện ở đây
+        console.error("LỖI FIRESTORE THỰC TẾ:", error.code, error.message);
       });
     } catch (e) {
-      console.error('Student data load error:', e);
+      console.error('Lỗi hệ thống:', e);
     }
   }, [user, selectedSubId, selectedCriteriaId, selectedMonthId, selectedClassId, selectedYearId, viewMode, isAuthValid, systemMode]);
 
