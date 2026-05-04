@@ -638,11 +638,16 @@ const App = () => {
       key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
     }
     
-    try {
+   try {
+      // Thêm .where('owner', '==', user.uid) để lọc dữ liệu theo người dùng hiện tại
       return db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key)
-        .collection('entries').onSnapshot((snap) => {
+        .collection('entries')
+        .where('owner', '==', user.uid) // <-- Dòng quan trọng nhất ở đây
+        .onSnapshot((snap) => {
           const data = {};
-          snap.forEach(doc => { data[doc.id] = doc.data(); });
+          snap.forEach(doc => { 
+            data[doc.id] = doc.data(); 
+          });
           setStudentData(data);
           setDraftData({});
         });
