@@ -793,13 +793,13 @@ const App = () => {
     }
   }, [draggedStudentId, students, selectedYearId, selectedClassId, showToast]);
 
- const handleSaveAllToFirebase = useCallback(async () => {
+const handleSaveAllToFirebase = useCallback(async () => {
   const studentIds = Object.keys(draftData);
   if (studentIds.length === 0) return;
   setIsSaving(true);
 
   try {
-    // 1. Giữ nguyên logic tạo 'key' để xác định đúng Lớp/Môn/Tháng
+    // 1. Xác định key (Lớp/Môn/Tháng)
     const systemSuffix = systemMode === 'vnedu' ? '_vnedu' : '';
     const isVnEduSubMode = systemMode === 'vnedu' && viewMode !== 'subject';
     let key = "";
@@ -811,23 +811,23 @@ const App = () => {
       key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
     }
 
-    // 2. Bắt đầu lưu dữ liệu riêng biệt (Thay thế cho đoạn docRefCheck cũ)
+    // 2. Lưu dữ liệu riêng biệt theo từng User
     const batch = db.batch();
     const timestamp = new Date().toISOString();
 
     for (const studentId of studentIds) {
-      // TẠO ID DUY NHẤT: Kết hợp mã học sinh và UID của giáo viên
+      // TẠO ID DUY NHẤT: Kết hợp mã học sinh và UID giáo viên để không bị đè
       const uniqueDocId = `${studentId}_${user.uid}`; 
       
       const docRef = db.collection('artifacts').doc(appId)
         .collection('public').doc('data')
         .collection('comments').doc(key)
-        .collection('entries').doc(uniqueDocId); // Lưu vào ID duy nhất này
+        .collection('entries').doc(uniqueDocId); 
 
       const updates = {
         ...draftData[studentId],
         studentId: studentId, 
-        owner: user.uid, // Đánh dấu chủ sở hữu để phục vụ lệnh lọc .where()
+        owner: user.uid, // Để lệnh .where('owner', '==', user.uid) hoạt động
         ownerName: user.displayName || user.email,
         lastModified: timestamp
       };
@@ -836,7 +836,7 @@ const App = () => {
     }
 
     await batch.commit();
-    setDraftData({}); // Xóa dữ liệu nháp sau khi lưu thành công
+    setDraftData({}); // Xóa dữ liệu nháp (Draft) sau khi đã lưu vào DB[cite: 1]
     alert("Đã lưu dữ liệu cá nhân của bạn thành công!");
 
   } catch (e) {
@@ -846,10 +846,6 @@ const App = () => {
     setIsSaving(false);
   }
 }, [draftData, user, appId, systemMode, viewMode, selectedYearId, selectedSubId, selectedMonthId, selectedClassId, selectedCriteriaId]);
-            return;
-          }
-        }
-      }
 
       const batch = db.batch();
       for (const sId of studentIds) {
