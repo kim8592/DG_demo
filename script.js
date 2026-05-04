@@ -793,14 +793,12 @@ const App = () => {
     }
   }, [draggedStudentId, students, selectedYearId, selectedClassId, showToast]);
 
-// --- ĐOẠN 1: HÀM LƯU DỮ LIỆU (THAY THẾ TOÀN BỘ HÀM CŨ) ---
 const handleSaveAllToFirebase = useCallback(async () => {
   const studentIds = Object.keys(draftData);
   if (studentIds.length === 0) return;
   setIsSaving(true);
 
   try {
-    // 1. Xác định Key (Lớp/Môn/Tháng)
     const systemSuffix = systemMode === 'vnedu' ? '_vnedu' : '';
     const isVnEduSubMode = systemMode === 'vnedu' && viewMode !== 'subject';
     let key = "";
@@ -812,14 +810,11 @@ const handleSaveAllToFirebase = useCallback(async () => {
       key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
     }
 
-    // 2. Thiết lập Batch lưu trữ
     const batch = db.batch();
     const timestamp = new Date().toISOString();
 
     for (const studentId of studentIds) {
-      // ID DUY NHẤT = MãHS + UID (Để không ai ghi đè bài của ai)
       const uniqueDocId = `${studentId}_${user.uid}`; 
-      
       const docRef = db.collection('artifacts').doc(appId)
         .collection('public').doc('data')
         .collection('comments').doc(key)
@@ -828,43 +823,28 @@ const handleSaveAllToFirebase = useCallback(async () => {
       const updates = {
         ...draftData[studentId],
         studentId: studentId,
-        owner: user.uid, // Quan trọng để lệnh lọc .where hoạt động
+        owner: user.uid,
         ownerName: user.displayName || user.email,
         lastModified: timestamp
       };
-
       batch.set(docRef, updates, { merge: true });
     }
 
-    // 3. Gửi dữ liệu lên Firebase
     await batch.commit(); 
     
-    // 4. Hoàn tất
-    setDraftData({}); 
+    setDraftData({});
     if (typeof showToast === 'function') {
-      showToast(`Đã lưu ${studentIds.length} học sinh thành công`, 'success', '✅', 3000);
+      showToast(`Đã lưu thành công`, 'success', '✅', 3000);
     } else {
       alert("Đã lưu thành công!");
     }
-
   } catch (error) {
-    console.error("Lỗi lưu:", error);
-    alert("Không thể lưu dữ liệu. Hãy kiểm tra kết nối!");
+    console.error("Save error:", error);
+    alert("Lỗi lưu dữ liệu!");
   } finally {
     setIsSaving(false);
   }
 }, [draftData, user, appId, systemMode, viewMode, selectedYearId, selectedSubId, selectedMonthId, selectedClassId, selectedCriteriaId, showToast]);
-
-
-// --- ĐOẠN 2: HÀM TẢI DỮ LIỆU (KIỂM TRA LẠI TRONG USEEFFECT) ---
-// Đảm bảo trong useEffect tải dữ liệu của bạn có đoạn query như thế này:
-/*
-  const query = db.collection('artifacts').doc(appId)
-    .collection('public').doc('data')
-    .collection('comments').doc(key)
-    .collection('entries')
-    .where('owner', '==', user.uid); // CHỈ LẤY BÀI CỦA TÔI
-*/
 
       const batch = db.batch();
       for (const sId of studentIds) {
