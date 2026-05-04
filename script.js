@@ -846,7 +846,9 @@ const handleSaveAllToFirebase = useCallback(async () => {
     setIsSaving(false);
   }
 }, [draftData, user, appId, systemMode, viewMode, selectedYearId, selectedSubId, selectedMonthId, selectedClassId, selectedCriteriaId]);
-
+    return;
+          }
+        }
       const batch = db.batch();
       for (const sId of studentIds) {
         const docRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key)
