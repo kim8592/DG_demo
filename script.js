@@ -793,13 +793,13 @@ const App = () => {
     }
   }, [draggedStudentId, students, selectedYearId, selectedClassId, showToast]);
 
-const handleSaveAllToFirebase = useCallback(async () => {
+const handleSaveAllToFirebase = useCallback(async () => { // PHẢI CÓ ASYNC Ở ĐÂY
   const studentIds = Object.keys(draftData);
   if (studentIds.length === 0) return;
   setIsSaving(true);
 
   try {
-    // 1. Xác định key (Lớp/Môn/Tháng)
+    // 1. Logic tạo key (giữ nguyên)
     const systemSuffix = systemMode === 'vnedu' ? '_vnedu' : '';
     const isVnEduSubMode = systemMode === 'vnedu' && viewMode !== 'subject';
     let key = "";
@@ -811,23 +811,22 @@ const handleSaveAllToFirebase = useCallback(async () => {
       key = `${selectedYearId}_${viewMode}_${selectedMonthId}_${selectedClassId}`;
     }
 
-    // 2. Lưu dữ liệu riêng biệt theo từng User
+    // 2. Logic lưu Batch
     const batch = db.batch();
     const timestamp = new Date().toISOString();
 
     for (const studentId of studentIds) {
-      // TẠO ID DUY NHẤT: Kết hợp mã học sinh và UID giáo viên để không bị đè
-      const uniqueDocId = `${studentId}_${user.uid}`; 
+      const uniqueDocId = `${studentId}_${user.uid}`; // Tách biệt theo User[cite: 1]
       
       const docRef = db.collection('artifacts').doc(appId)
         .collection('public').doc('data')
         .collection('comments').doc(key)
-        .collection('entries').doc(uniqueDocId); 
+        .collection('entries').doc(uniqueDocId);
 
       const updates = {
         ...draftData[studentId],
-        studentId: studentId, 
-        owner: user.uid, // Để lệnh .where('owner', '==', user.uid) hoạt động
+        studentId: studentId,
+        owner: user.uid, // Để lệnh lọc .where hoạt động[cite: 1]
         ownerName: user.displayName || user.email,
         lastModified: timestamp
       };
@@ -835,20 +834,24 @@ const handleSaveAllToFirebase = useCallback(async () => {
       batch.set(docRef, updates, { merge: true });
     }
 
-    await batch.commit();
-    setDraftData({}); // Xóa dữ liệu nháp (Draft) sau khi đã lưu vào DB[cite: 1]
-    alert("Đã lưu dữ liệu cá nhân của bạn thành công!");
+    // 3. Thực thi lưu xuống Database[cite: 1]
+    await batch.commit(); // Dòng này sẽ không lỗi nếu có async ở trên[cite: 1]
+    
+    setDraftData({});
+    if (typeof showToast === 'function') {
+      showToast(`Đã lưu ${studentIds.length} học sinh thành công`, 'success', '✅', 3000);
+    } else {
+      alert("Đã lưu dữ liệu cá nhân thành công!");
+    }
 
-  } catch (e) {
-    console.error("Save error:", e);
+  } catch (error) {
+    console.error("Save error:", error);
     alert("Có lỗi xảy ra khi lưu dữ liệu.");
   } finally {
     setIsSaving(false);
   }
-}, [draftData, user, appId, systemMode, viewMode, selectedYearId, selectedSubId, selectedMonthId, selectedClassId, selectedCriteriaId]);
-    return;
-          }
-        }
+}, [draftData, user, appId, systemMode, viewMode, selectedYearId, selectedSubId, selectedMonthId, selectedClassId, selectedCriteriaId, showToast]);
+
       const batch = db.batch();
       for (const sId of studentIds) {
         const docRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('comments').doc(key)
