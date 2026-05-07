@@ -883,7 +883,7 @@ const App = () => {
             systemInstruction: { parts: [{ text: AI_PROMPTS.specificCompetencies }] },
             generationConfig: { 
               temperature: 0.3,
-              maxOutputTokens: 2000
+              maxOutputTokens: 2500
             }
           })
         });
