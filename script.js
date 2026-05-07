@@ -69,13 +69,20 @@ MỨC ĐÁNH GIÁ (CỰC KỲ QUAN TRỌNG):
 [StudentName]|||[Comment]
 (KHÔNG giải thích, KHÔNG ký tự dư)`,
   
-  user: (studentList, aiPrompt) => `NỘI DUNG CHỌN:
+ user: (studentList, aiPrompt) => `NỘI DUNG GIÁO VIÊN:
 ${aiPrompt || "Không có nội dung"}
+
+YÊU CẦU:
+- Nếu có nhiều ý trong nội dung giáo viên, hãy CHỌN NGẪU NHIÊN 1 ý phù hợp cho mỗi học sinh.
+- Nếu học sinh có ghi chú riêng thì ưu tiên kết hợp ghi chú đó.
+- Mỗi học sinh nhận xét khác nhau, tránh trùng lặp.
+- Giọng văn tích cực, đúng chuẩn giáo viên tiểu học.
 
 DANH SÁCH HỌC SINH:
 ${studentList}
 
-Trả về theo format: [StudentName]|||[Comment]`,
+Trả về đúng format:
+[StudentName]|||[Comment]`
 
   specificCompetencies: `Bạn là giáo viên tiểu học Việt Nam giàu kinh nghiệm. Nhận xét học sinh về 7 năng lực đặc thù với thái độ tích cực, khích lệ.
 LUẬT BẮTBUỘC:
