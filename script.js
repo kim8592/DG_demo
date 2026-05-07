@@ -34,7 +34,15 @@ const SPECIFIC_COMPETENCIES = [
   { id: 'art', name: 'Thẩm mĩ' },
   { id: 'phys', name: 'Thể chất' }
 ];
-
+const SPECIFIC_COMPETENCY_HINTS = {
+  lang: "diễn đạt, đọc hiểu, trình bày ý kiến, dùng từ, viết câu",
+  math: "tính toán, giải toán, nhận biết số, trình bày bài giải",
+  sci: "quan sát, tìm hiểu môi trường, vận dụng kiến thức khoa học",
+  tech: "thao tác thực hành, sử dụng dụng cụ, thực hiện quy trình",
+  it: "sử dụng máy tính, thao tác phần mềm, kỹ năng tin học",
+  art: "cảm thụ cái đẹp, vẽ, sáng tạo, trình bày sản phẩm",
+  phys: "vận động, rèn luyện thân thể, phối hợp động tác"
+};
 const SUBJECT_TO_COMPETENCY_MAP = {
   'Tiếng Việt': 'lang',
   'Toán': 'math',
@@ -820,10 +828,17 @@ const App = () => {
           info = `${criteriaName}, Mức: ${lv}`;
         } else {
           const list = viewMode === 'quality' ? QUALITY_CRITERIA : (viewMode === 'competency' ? GENERAL_COMPETENCIES : SPECIFIC_COMPETENCIES);
-          const details = list.map(c => {
-            const lv = draft[`level_${c.id}`] !== undefined ? draft[`level_${c.id}`] : (d[`level_${c.id}`] || "");
-            return lv ? `${c.name}:${lv}` : null;
-          }).filter(Boolean).join(", ");
+         const details = list.map(c => {
+  const lv = draft[`level_${c.id}`] !== undefined
+    ? draft[`level_${c.id}`]
+    : (d[`level_${c.id}`] || "");
+
+  if (!lv) return null;
+
+  const hint = SPECIFIC_COMPETENCY_HINTS[c.id] || "";
+
+  return `${c.name}: ${lv} (${hint})`;
+}).filter(Boolean).join(", ");
           info = details || "N/A";
         }
         
