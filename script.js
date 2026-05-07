@@ -909,10 +909,37 @@ const App = () => {
             comment = comment.replace(new RegExp(`\\b${student.name}\\b`, 'gi'), '');
 
             const d = studentData[student.id] || {};
-            const draft = draftData[student.id] || {};
-            const level = draft.level !== undefined ? draft.level : (d.level || "");
+const draft = draftData[student.id] || {};
 
-            comment = processComment(comment, level);
+let finalLevel = "";
+
+if (viewMode === "specific" && systemMode === "smas") {
+
+  const levels = SPECIFIC_COMPETENCIES.map(c =>
+    draft[`level_${c.id}`] !== undefined
+      ? draft[`level_${c.id}`]
+      : (d[`level_${c.id}`] || "")
+  ).filter(Boolean);
+
+  const countT = levels.filter(l => l === "T").length;
+  const countC = levels.filter(l => l === "C").length;
+
+  if (countC > 0) {
+    finalLevel = "C";
+  } else if (countT === levels.length && levels.length > 0) {
+    finalLevel = "T";
+  } else {
+    finalLevel = "Đ";
+  }
+
+} else {
+
+  finalLevel = draft.level !== undefined
+    ? draft.level
+    : (d.level || "");
+}
+
+comment = processComment(comment, finalLevel);
 
             if (comment.length > 10) {
               updates[student.id] = comment;
