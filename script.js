@@ -69,7 +69,7 @@ MỨC ĐÁNH GIÁ (CỰC KỲ QUAN TRỌNG):
 [StudentName]|||[Comment]
 (KHÔNG giải thích, KHÔNG ký tự dư)`,
   
- user: (studentList, aiPrompt) => `NỘI DUNG GIÁO VIÊN:
+  user: (studentList, aiPrompt) => `NỘI DUNG GIÁO VIÊN:
 ${aiPrompt || "Không có nội dung"}
 
 YÊU CẦU:
