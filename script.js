@@ -72,7 +72,16 @@ MỨC ĐÁNH GIÁ (CỰC KỲ QUAN TRỌNG):
 - Mức T: CHỈ khen, KHÔNG chứa "cần/nên/cố gắng/khắc phục/rèn luyện/lưu ý"
 - Mức H/Đ: BẮT BUỘC có (1) Khen + (2) Hướng cải thiện rõ ràng. PHẢI chứa "cần/nên/cố gắng/rèn luyện"
 - Mức C: Nêu vấn đề + cách khắc phục cụ thể
+Nếu học sinh có nhiều năng lực:
+- phải nhận xét tổng hợp từ nhiều năng lực
+- không chỉ nhận xét 1 năng lực duy nhất
+- ưu tiên ghép 2-4 biểu hiện nổi bật trong cùng câu
 
+Ví dụ tốt:
+"Em đọc trôi chảy, tính toán khá chính xác và biết vận dụng kiến thức vào học tập."
+
+Ví dụ không đạt:
+"Em đọc tốt."
 ĐỊNH DẠNG TRẢ VỀ:
 [StudentName]|||[Comment]
 (KHÔNG giải thích, KHÔNG ký tự dư)`,
@@ -924,13 +933,18 @@ if (viewMode === "specific" && systemMode === "smas") {
   const countT = levels.filter(l => l === "T").length;
   const countC = levels.filter(l => l === "C").length;
 
-  if (countC > 0) {
-    finalLevel = "C";
-  } else if (countT === levels.length && levels.length > 0) {
-    finalLevel = "T";
-  } else {
-    finalLevel = "Đ";
-  }
+  if (countT >= 5 && countC === 0) {
+
+  finalLevel = "T";
+
+} else if (countC >= 3) {
+
+  finalLevel = "C";
+
+} else {
+
+  finalLevel = "Đ";
+}
 
 } else {
 
