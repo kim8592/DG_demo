@@ -77,11 +77,16 @@ Nếu học sinh có nhiều năng lực:
 - không chỉ nhận xét 1 năng lực duy nhất
 - ưu tiên ghép 2-4 biểu hiện nổi bật trong cùng câu
 
-Ví dụ tốt:
-"Em đọc trôi chảy, tính toán khá chính xác và biết vận dụng kiến thức vào học tập."
+Khi nhận xét cả danh sách nhiều học sinh:
 
-Ví dụ không đạt:
-"Em đọc tốt."
+- Phải phân bổ đều các năng lực giữa các học sinh.
+- Không lặp lại quá nhiều Ngôn ngữ hoặc Tính toán.
+- Học sinh khác nhau nên ưu tiên năng lực khác nhau.
+- Luân phiên sử dụng:
+Ngôn ngữ, Tính toán, Khoa học, Công nghệ, Tin học, Thẩm mĩ, Thể chất.
+
+Nếu học sinh có mức tốt ở năng lực nào thì ưu tiên nêu năng lực đó.
+Không bỏ sót năng lực nổi bật.
 ĐỊNH DẠNG TRẢ VỀ:
 [StudentName]|||[Comment]
 (KHÔNG giải thích, KHÔNG ký tự dư)`,
